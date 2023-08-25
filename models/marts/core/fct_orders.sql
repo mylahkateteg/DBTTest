@@ -1,24 +1,21 @@
-with orders as (
-
-select *
-
-from {{ ref('stg_orders')}}
+with orders as  (
+    select * 
+    
+    from {{ ref('stg_orders' )}}
 ),
 
 payments as (
-
-    select *
-
+    select * 
+    
     from {{ ref('stg_payments') }}
 ),
 
-ord_payments as (
+order_payments as (
     select
-        order_id,
-        amount
-    
-    from payments
+        ORDERID as order_id,
+        sum(case when status = 'success' then amount end) as amount
 
+    from payments
     group by 1
 ),
 
@@ -27,12 +24,13 @@ final as (
     select
         orders.order_id,
         orders.customer_id,
-        coalesce(ord_payments.amount, 0) as amount
-    
-    from orders
+        orders.order_date,
+        coalesce(order_payments.amount, 0) as amount
 
-    left join payments using (order_id)
+    from orders
+    left join order_payments using (order_id)
 )
 
 select * 
+
 from final
