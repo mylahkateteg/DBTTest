@@ -1,18 +1,14 @@
 with orders as  (
-    select * 
-    
-    from {{ ref('stg_orders' )}}
+    select * from {{ ref('stg_orders' )}}
 ),
 
 payments as (
-    select * 
-    
-    from {{ ref('stg_payments') }}
+    select * from {{ ref('stg_payments') }}
 ),
 
 order_payments as (
     select
-        ORDERID as order_id,
+        order_id,
         sum(case when status = 'success' then amount end) as amount
 
     from payments
@@ -31,6 +27,4 @@ final as (
     left join order_payments using (order_id)
 )
 
-select * 
-
-from final
+select * from final
