@@ -1,0 +1,11 @@
+# Configure a source for the tables raw.jaffle_shop.customers and raw.jaffle_shop.orders in a file called src_jaffle_shop.yml.
+
+version: 2 
+
+sources:
+    - name: jaffle_shop
+      database: raw
+      schema: jaffle_shop
+      tables:
+        - name: customers
+        - name: orders

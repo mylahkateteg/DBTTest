@@ -1,0 +1,13 @@
+# Extra credit: Configure a source for the table raw.stripe.payment in a file called src_stripe.yml.
+version: 2 
+
+sources:
+    - name: stripe
+      database: raw
+      schema: stripe
+      tables:
+        - name: payment
+          loaded_at_field: _batched_at
+          freshness:
+            warn_after: {count: 12, period: hour}
+            error_after: {count: 24, period: hour}
